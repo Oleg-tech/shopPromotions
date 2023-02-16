@@ -1,0 +1,196 @@
+.product .dives {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    background-color: white;
+    margin: 5px;
+    text-decoration: none;
+}
+
+.product .discount {
+    position: absolute;
+    /* float: left; */
+    text-align: center;
+    left: 0px;
+    top: 20px;
+    width: 50px;
+    margin: 20 0 0 0;
+    background-color: red;
+    color: white;
+}
+
+.product .add_to_selected {
+    position: absolute;
+    /* float: left; */
+    text-align: center;
+    right: 10px;
+    top: 0px;
+    height: 20px;
+    width: 20px;
+    margin: 20 0 0 0;
+    color: white;
+}
+
+.product .picture {
+    margin-top: 15px;
+    height: 150px;
+    width: 150px;
+    background-color: yellow;
+}
+
+.container_img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.product .info {
+    height: 100px;
+    width: 175px;
+    padding-top: 5px;
+    background-color: white;
+}
+
+.product .old_price {
+    text-align: left;
+    height:20px;
+    font-size: 15;
+    margin-top: 0%;
+    color: gray;
+}
+
+.product .new_price {
+    text-align: left;
+    height:25px;
+    font-size: 17;
+    color: red;
+}
+
+.product .title {
+    height: 52px;
+    text-align: left;
+    display: block;
+    display: -webkit-box;
+    font-size: 15px;
+    -webkit-line-clamp: 3; /* количество строк */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* text-overflow: ellipsis; */
+    /* white-space: nowrap;
+    overflow: hidden; */
+}
+
+#weight {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    color: gray;
+    /* float: left;
+    margin-left: 5px;
+    margin-bottom: 5px; */
+}
+
+.try {
+    background-color: #80C5A0;
+    width: 400px;
+    height: 100px;
+    /* border-radius: 75% / 75%; */
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    /* border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0; */
+  }
+
+.test {
+    border: 1px solid #000;
+    padding: 5px;
+    display: block;
+    display: -webkit-box;
+    max-width: 400px;
+    font-size: 20px;
+    -webkit-line-clamp: 4; /* количество строк */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+.detailed_info {
+    display: flex;
+}
+
+.detailed_info .left_info {
+    left: 0px;
+    width: 250px;
+}
+
+.detailed_info .right_info {
+    margin-left: auto;
+    width: 700px;
+}
+
+.upper {
+    width: auto;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.upper_picture {
+    width: 200px;
+    height: 200px;
+}
+
+.sidenav {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.main {
+  padding: 0px 10px;
+  padding-top: 50px;
+  text-decoration: none;
+  background-color: black;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+.sidebar {
+    position: fixed;
+    overflow-y: scroll;
+    top: 60px;
+    left: 0px;
+    height: 85%;
+    width: 200px;
+    background-color: white;
+    z-index:1;
+}
+
+.bookmark_for_prod {
+    /*margin-left: 100px;*/
+    color: #f2f2f2;
+    /*padding: 14px 16px;*/
+    height: 40px;
+}

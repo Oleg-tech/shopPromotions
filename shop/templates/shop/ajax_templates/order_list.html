@@ -1,0 +1,8 @@
+{{ordering}}Показувати спочатку:
+{% for key, value in order_list.items %}
+    {% if ordering == key %}
+        <span style="text-decoration: none; background-color: yellow;">{{value}}</span>
+    {% else %}
+        <button class="orderButton" value="{{key}}" style="text-decoration: none;">{{value}}</button>
+    {% endif %}
+{% endfor %}

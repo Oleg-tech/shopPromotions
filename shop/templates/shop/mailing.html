@@ -1,0 +1,30 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div style="margin-top: 50px;">
+        <p>Розсилка</p>
+        <p>Лист на пошту буде надходити кожного тижня о 7:00</p>
+        <p>Оберіть, які категорії товарів ви хочете отримувати:</p>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <p>Оберіть магазини:</p>
+            {% for shop in shops %}
+                <div>
+                    <input name="shops" id="{{shop}}" value="{{shop}}" type="checkbox">
+                    <label for="{{key}}"><b>{{shop}}</b></label>
+                </div>
+            {% endfor %}
+            <p>Оберіть категорії товарів:</p>
+            {% for key, value in categories.items %}
+                <div>
+                    <input name="categories" id="{{key}}" value="{{key}}" type="checkbox">
+                    <label for="{{key}}"><b>{{value}}</b></label>
+                </div>
+            {% endfor %}
+
+            <input class="btn login_btn" type="submit" value="Зареєструватись">
+        </form>
+        <a href="{% url 'logout' %}">Вийти</a>
+    </div>
+{% endblock %}

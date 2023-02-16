@@ -1,0 +1,62 @@
+header {
+    background-color: #333;
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    font-size: 20;
+    z-index: 9;
+}
+
+.links {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 25px;
+    padding-bottom: 21px;
+    text-decoration: none;
+    margin: 0;
+}
+
+.shop {
+    float: left;
+    display: block;
+    left: 0;
+    color: #f2f2f2;
+    padding: 14px 16px;
+    height: 40px;
+}
+
+.profile {
+    float: right;
+    display: block;
+    right: 0;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    height: 40px;
+}
+
+.bookmark {
+    /*margin-left: 100px;*/
+    color: #f2f2f2;
+    padding: 14px 16px;
+    height: 40px;
+}
+
+.header .links:hover {
+    background: #ddd;
+    color: black;
+}
+
+footer {
+    position: fixed;
+    background-color: #333;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}

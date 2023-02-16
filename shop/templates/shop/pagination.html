@@ -1,0 +1,60 @@
+<nav aria-label="pagination">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item disabled"><a class="page-link" href="#">Назад</a></li>
+        {% endif %}
+
+        {% if page_obj.number >= 4 %}
+            {% if 'order_by' in request.get_full_path and '&page' not in request.get_full_path or 'q=' in request.get_full_path and '&page' not in request.get_full_path %}
+                <li class="page-item"><a class="page-link" href="{{ request.get_full_path }}&page=1">1</a></li>
+            {% endif %}
+        
+        {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Перша</a></li>
+            <li class="page-item disabled"><a class="page-link" href="#">Назад</a></li>
+        {% endif %}
+
+        {% for page in page_obj.paginator.page_range %}
+            {% if page_obj.number == page %}
+            <li class="page-item{% if page_obj.number == page %} active{% endif %}">
+                {% if 'order_by' in request.get_full_path and '&page' not in request.get_full_path or 'q=' in request.get_full_path and '&page' not in request.get_full_path %}
+                    <a class="page-link" href="{{ request.get_full_path }}&page={{ page }}">{{ page }}</a>
+                {% endif %}
+                {% if 'order_by' not in request.get_full_path and 'q=' not in request.get_full_path %}
+                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                {% endif %}
+            </li>
+            {% elif page > page_obj.number|add:'-3' and page < page_obj.number|add:'3' %}
+            <li class="page-item">
+                {% if 'order_by' in request.get_full_path and '&page' not in request.get_full_path or 'q=' in request.get_full_path and '&page' not in request.get_full_path %}
+                    <a class="page-link" href="{{ request.get_full_path }}&page={{ page }}">{{ page }}</a>
+                {% endif %}
+                {% if 'order_by' not in request.get_full_path and 'q=' not in request.get_full_path %}
+                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                {% endif %}
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+
+            {% if page_obj.paginator.num_pages|add:'-3' >= page_obj.number %}
+            <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+            {% if 'order_by' in request.get_full_path and '&' not in request.get_full_path %}
+                <li class="page-item"><a class="page-link" href="{{ request.get_full_path }}&page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
+            {% endif %}
+            {% endif %}
+
+            {% if 'order_by' not in request.get_full_path and 'q=' not in request.get_full_path %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Вперед</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Остання</a></li>
+            {% endif %}
+
+            {% else %}
+                <li class="page-item disabled"><a class="page-link" href="#">Вперед</a></li>
+                <li class="page-item disabled"><a class="page-link" href="#">Остання</a></li>
+        {% endif %}
+    </ul>
+</nav>

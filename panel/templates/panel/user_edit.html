@@ -1,0 +1,22 @@
+{% extends "panel/admin_base.html" %}
+
+{% block title %}Редактирование пользователя{% endblock %}
+
+{% load static %}
+{% block afterhead %}
+
+{% endblock %}
+{% block content %}
+    <link rel='stylesheet' href="{% static 'css/style.css' %}">
+    <div class="container-fluid" align="center">
+        <form action="" method="post" class="form-horizontal col-sm-12 col-md-6 col-lg-4 shadow">
+            {% csrf_token %}
+            {{ form }}
+            <br>
+            <div class=" form-user">
+                <button type="submit" class="btn btn-primary shadow_head">Сохранить</button>
+                <a class="btn btn-primary shadow_head bottom-left" href="{% url 'panel:mailing_table_admin' %}">Отмена</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'shop/base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Головна сторінка
+{% endblock %}
+
+{% block content %}
+    <link type="text/css" href="{% static 'css/main.css' %}" rel="stylesheet" />
+
+    <span>Магазини</span>
+
+    <div class="pictures" style="background-colour: rgb(162, 144, 140);">
+        <div><a href="/novus/all_offers"><img class="parts" src="{% static 'images/novus.jpg' %}"></a></div>
+        <div><a href="{% url 'showcategory' shop='silpo' cat='all_offers' %}"><img class="parts" src="{% static 'images/silpo.png' %}"></a></div>
+        <div><a href="{% url 'showcategory' shop='auchan' cat='all_offers' %}"><img class="parts" src="{% static 'images/auchan.jpg' %}"></a></div>
+        <div><a href="{% url 'showcategory' shop='megamarket' cat='all_offers' %}"><img class="parts" src="{% static 'images/megamarket.jpg' %}"></a></div>
+        <div><a href="{% url 'showcategory' shop='varus' cat='all_offers' %}"><img class="parts" src="{% static 'images/varus.jpg' %}"></a></div>
+        <div><a href="#"><img class="parts" src="{% static 'images/metro.jpg' %}"></a></div>
+    </div>
+
+    <span>Заклади</span>
+{% endblock %}

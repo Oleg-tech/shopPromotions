@@ -1,0 +1,48 @@
+{% extends 'panel/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+    {% include 'shop\pagination.html' %}
+
+    <table border="1" align="center" id="example" class="table table-striped table-bordered" style="width:80%; background-color: white;">
+        <thead class="thead-dark">
+            <tr class="thead-dark">
+                <th scope="row">Id</th>
+                <th scope="row">Нікнейм</th>
+                <th scope="row">Ім'я</th>
+                <th scope="row">Прізвище</th>
+                <th scope="row">Пошта</th>
+                <th scope="row">Адмін</th>
+                <th scope="row">Редагувати</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{user.id}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.first_name}}</td>
+                    <td>{{user.last_name}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{% if user.is_superuser %}Так{% else %}Ні{% endif %}</td>
+                    <td>
+                        <form method="get" action="{% url 'panel:edit_user' user.id %}">
+                            <button type="submit">Редагувати</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot class="thead-dark">
+            <tr class="thead-dark">
+                <th scope="row">Id</th>
+                <th scope="row">Нікнейм</th>
+                <th scope="row">Ім'я</th>
+                <th scope="row">Прізвище</th>
+                <th scope="row">Пошта</th>
+                <th scope="row">Адмін</th>
+                <th scope="row">Редагувати</th>
+            </tr>
+        </tfoot>
+    </table>
+{% endblock %}

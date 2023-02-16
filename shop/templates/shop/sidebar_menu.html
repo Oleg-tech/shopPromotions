@@ -1,0 +1,44 @@
+<style>
+    .sidebar {
+        position: fixed;
+        overflow-y: scroll;
+        top: 60px;
+        left: 0px;
+        height: 83%;
+        width: 250px;
+        background-color: white;
+        z-index:1;
+    }
+
+    .change_letter::first-letter {
+        initial-letter: 1;
+    }
+</style>
+
+<div class="sidebar" style="margin-top: 30px;">
+    Магазини
+    {% for shop in shops %}
+        <div>
+            <input class="filter-checkbox" data-filter="shops" id="{{shop}}" value="{{shop}}" type="checkbox">
+            <label for="{{key}}"><b>{{shop}}</b></label>
+        </div>
+    {% endfor %}
+    <hr>
+    Категорії
+    {% for key, value in categories.items %}
+        <div>
+            <input class="filter-checkbox" data-filter="categories" id="{{key}}" value="{{key}}" type="checkbox">
+            <label for="{{key}}"><b>{{value}}</b></label>
+        </div>
+    {% endfor %}
+    <hr>
+    Країни
+    {% for country in countries %}
+        {% if country != "-" %}
+            <div>
+                <input class="filter-checkbox" data-filter="country" id="{{country}}" value="{{country}}" type="checkbox">
+                <label class="change_letter" for="{{country}}"><b>{{country}}</b></label>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>

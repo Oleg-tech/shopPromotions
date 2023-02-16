@@ -1,0 +1,20 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="path">
+        {% if present_shop != None %}
+            <a href="/{{ present_shop }}/all_offers">{{ present_shop }}</a>
+        {% endif %}
+        {% if present_category != None %}
+            > <a href="/{{ present_shop }}/{{ present_category }}">{{ present_category }}</a>
+        {% endif %}
+    </div>
+
+    <div>
+        <p>{{ object.name }}</p>
+    </div>
+
+{% endblock %}
+

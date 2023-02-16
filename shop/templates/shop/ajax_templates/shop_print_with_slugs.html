@@ -1,0 +1,37 @@
+{% load static %}
+
+<script src="{% static 'js/add_to_selected.js' %}"></script>
+
+{% for product in data %}
+    <div class="dives" align="center">
+        <div class="discount">-{{ product.percent_of_sale }}%</div>
+        <div class="picture" style="z-index: 100;">
+            <img class='container_img' style="height: 150px; width: 150px;" src="{{ product.picture }}">
+        </div>
+
+        <div class="add_to_selected">
+            <form class="like-form" method="POST" action="" id="picture_{{product.id}}">
+                {% csrf_token %}
+                {% if product.id not in selected_products %}
+                    <button class="{{product.id}}" style="background: url({% static 'images/balance.svg' %}); width:30px; height:30px; border: none;" type="submit" name="temp" id="{{product.id}}" value="{{product.id}}"></button>
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="info">
+            <div class="old_price">
+                <s>{{ product.old_price }} грн.</s>
+            </div>
+            <div class="new_price" style="font-size: 15px;">
+                <strong>{{ product.new_price }} грн.</strong> до {{ product.date_of_end }}
+            </div>
+            <div class="title">
+                {{ product.name }}
+            </div>
+        </div>
+
+        <div id="weight"><strong>{{ product.category }}</strong></div>
+    </div>
+
+    <div></div>
+{%endfor%}
