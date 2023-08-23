@@ -1,73 +1,257 @@
-import os
-import shutil
-from time import time
-
-categories = {
-    'drinks': [
-        ['varus', 'https://varus.zakaz.ua/uk/promotions/?category_id=drinks-varus&page='],
-        ['novus', 'https://novus.zakaz.ua/uk/promotions/?category_id=drinks&page='],
-        ['megamarket', 'https://megamarket.zakaz.ua/uk/promotions/?category_id=drinks-megamarket&page='],
-        ['eko', 'https://eko.zakaz.ua/uk/promotions/?category_id=drinks-ekomarket&page='],
-        ['auchan', 'https://auchan.zakaz.ua/uk/promotions/?category_id=drinks-auchan&page=']
-    ],
-    'alcohol': [
-        ['varus', 'https://varus.zakaz.ua/uk/promotions/?category_id=alcohol-varus&page='],
-        ['novus', 'https://novus.zakaz.ua/uk/promotions/?category_id=eighteen-plus&page='],
-        ['megamarket', 'https://megamarket.zakaz.ua/uk/promotions/?category_id=alcohol-megamarket&page='],
-        ['eko', 'https://eko.zakaz.ua/uk/promotions/?category_id=alcohol-ekomarket&page='],
-        ['auchan', 'https://auchan.zakaz.ua/uk/promotions/?category_id=eighteen-plus-auchan&page=']
-    ]
-}
-
-# photo_id = 0
-errors = list()
-
+import time
 
 def time_counter(func):
-    def wrapper():
-        start = time()
-        func()
-        send_report(time() - start)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        
+        elapsed_time = end_time - start_time
+        print(f"Time = {elapsed_time}")
+        return result
     return wrapper
 
-
-# def get_photo_id():
-#     return photo_id
-#
-#
-# def set_photo_id():
-#     global photo_id
-#     photo_id += 1
-#
-#
-# def set_null_photo_id():
-#     global photo_id
-#     photo_id = 0
+# Configurations for zakaz.ua
+headers_zakaz = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+    'Accept-Language': 'uk'
+}
 
 
-def remove_from_folder():   # clear folder with images
-    folder = 'shop/static/products'
-    for filename in os.listdir(folder):
-        file_path = os.path.join(folder, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        except Exception as ex:
-            print('Failed to delete %s. Reason: %s' % (file_path, ex))
+def get_data_for_zakaz_request(product_amount):
+    data = f"""
+    {{
+        "method": "GetSimpleCatalogItems",
+        "data":
+        {{
+            "CategoryFilter": [],
+            "From": 1,
+            "MultiFilters": "",
+            "Promos": [],
+            "RangeFilters": "",
+            "To": {product_amount},
+            "UniversalFilters": [],
+            "basketGuid": "",
+            "businessId": 1,
+            "deliveryType": 2,
+            "filialId": 3288,
+            "ingredients": "false",
+            "merchantId": 1,
+            "onlyPromo": "true",
+        }}
+    }}
+    """
+
+    return data
 
 
-def collect_errors(url, ex):
-    global errors
-    buf = url[8:]
-    errors.append(buf[:buf.find('.zakaz')])
-    print(url, ex)
+categories_zakaz: dict = {
+    'bakery-varus': 'Випічка',
+    'bakery': 'Випічка',
+    'bakery-metro': 'Випічка',
+    'bakery-ekomarket': 'Випічка',
+    'bakery-auchan': 'Випічка',
+
+    'fruits-and-vegetables': 'Фрукти та овочі',
+    'fruits-and-vegetables-auchan': 'Фрукти та овочі',
+    'fruits-and-vegetables-varus': 'Фрукти та овочі',
+    'fruits-and-vegetables-ekomarket': 'Фрукти та овочі',
+    'fruits-and-vegetables-metro': 'Фрукти та овочі',
+
+    'snacks-and-sweets': 'Снеки та солодощі',
+    'snacks-and-sweets-megamarket': 'Снеки та солодощі',
+    'snacks-and-sweets-varus': 'Снеки та солодощі',
+    'snacks-and-sweets-ekomarket': 'Снеки та солодощі',
+    'sweets-and-snacks-auchan': 'Снеки та солодощі',
+    'snacks-ekomarket': 'Снеки та солодощі',
+    'snacks-megamarket': 'Снеки та солодощі',
+    'snacks-and-sweets-metro': 'Снеки та солодощі',
+    'snacks-varus': 'Снеки та солодощі',
+    'packets-cereals': 'Снеки та солодощі',
+    'crisps-and-snacks': 'Снеки та солодощі',
+    'crisps-and-snacks-metro': 'Снеки та солодощі',
+    'packets-cereals-metro': 'Снеки та солодощі',
+    'crisps-and-snacks-auchan': 'Снеки та солодощі',
+
+    'eighteen-plus': 'Алкоголь',
+    'alcohol-varus': 'Алкоголь',
+    'alcohol-megamarket': 'Алкоголь',
+    'alcohol-ekomarket': 'Алкоголь',
+    'eighteen-plus-auchan': 'Алкоголь',
+    'eighteen-plus-metro': 'Алкоголь',
+
+    'drinks': 'Напої',
+    'drinks-varus': 'Напої',
+    'drinks-ekomarket': 'Напої',
+    'drinks-megamarket': 'Напої',
+    'drinks-auchan': 'Напої',
+    'drinks-metro': 'Напої',
+    'hot-drinks-megamarket': 'Напої',
+    'hot-drinks-metro': 'Напої',
+    'hot-drinks-varus': 'Напої',
+    'hot-drinks-novus': 'Напої',
+    'hot-drinks-ekomarket': 'Напої',
+    'hot-drinks-auchan': 'Напої',
+
+    'canned-food-ekomarket': 'Консервація, соуси та спеції',
+    'canned-food-oil-vinegar-metro': 'Консервація, соуси та спеції',
+    'canned-food-auchan': 'Консервація, соуси та спеції',
+    'canned-food-megamarket': 'Консервація, соуси та спеції',
+    'canned-food-varus': 'Консервація, соуси та спеції',
+
+    'frozen': 'Заморожені продукти',
+    'frozen-varus': 'Заморожені продукти',
+    'frozen-auchan': 'Заморожені продукти',
+    'frozen-megamarket': 'Заморожені продукти',
+    'frozen-ekomarket': 'Заморожені продукти',
+    'frozen-metro': 'Заморожені продукти',
+
+    'dairy-and-eggs-varus': 'Молочне, яйця, сир',
+    'dairy-and-eggs': 'Молочне, яйця, сир',
+    'dairy-and-eggs-metro': 'Молочне, яйця, сир',
+    'dairy-and-eggs-ekomarket': 'Молочне, яйця, сир',
+    'dairy-and-eggs-auchan': 'Молочне, яйця, сир',
+    'dairy-and-eggs-megamarket': 'Молочне, яйця, сир',
+
+    'meat-fish-poultry-varus': 'М\'ясо, риба, птиця',
+    'meat-fish-poultry': 'М\'ясо, риба, птиця',
+    'meat-fish-poultry-metro': 'М\'ясо, риба, птиця',
+    'meat-fish-poultry-ekomarket': 'М\'ясо, риба, птиця',
+    'meat-fish-poultry-auchan': 'М\'ясо, риба, птиця',
+    'meat-fish-poultry-megamarket': 'М\'ясо, риба, птиця',
+
+    'grocery-varus': 'Бакалія',
+    'grocery-ekomarket': 'Бакалія',
+    'grocery-and-sweets-auchan': 'Бакалія',
+    'grocery-megamarket': 'Бакалія',
+
+    'sauces-and-spices-varus': 'Консервація, соуси та спеції',
+    'sauces-and-spices-novus': 'Консервація, соуси та спеції',
+    'sauces-and-spices-metro': 'Консервація, соуси та спеції',
+    'sauces-and-spices-ekomarket': 'Консервація, соуси та спеції',
+    'sauces-and-spices-auchan': 'Консервація, соуси та спеції',
+    'sauces-and-spices-megamarket': 'Консервація, соуси та спеції',
+
+    'ready-meals-varus': 'Готові страви',
+    'ready-meals': 'Готові страви',
+    'ready-meals-auchan': 'Готові страви',
+
+    'for-animals-varus': 'Для тварин',
+    'for-animals': 'Для тварин',
+    'for-animals-metro': 'Для тварин',
+    'for-animals-ekomarket': 'Для тварин',
+    'for-animals-auchan': 'Для тварин',
+
+    'household-chemicals': 'Для дому',
+    'household-goods-varus': 'Для дому',
+    'household-chemicals-auchan': 'Для дому',
+    'household-and-pets-care-auchan': 'Для дому',
+    'household-goods-metro': 'Для дому',
+    'household-goods-megamarket': 'Для дому',
+    'household-and-cleaning': 'Для дому',
+    'household-goods-ekomarket': 'Для дому',
+
+    'kitchenware': 'Для дому',
+    'kitchenware-varus': 'Для дому',
+    'kitchenware-auchan': 'Для дому',
+    'kitchenware-megamarket': 'Для дому',
+    'kitchenware-metro': 'Для дому',
+    'kitchenware-ekomarket': 'Для дому',
+
+    'interior-and-textiles-varus': 'Для дому',
+    'home-interior-and-textiles-metro': 'Для дому',
+
+    'hygiene': 'Гігієна',
+    'hygiene-auchan': 'Гігієна',
+    'personal-hygiene': 'Гігієна',
+    'personal-hygiene-varus': 'Гігієна',
+    'personal-hygiene-metro': 'Гігієна',
+    'personal-care-cosmetics-perfumes-metro': 'Гігієна',
+    'personal-hygiene-ekomarket': 'Гігієна',
+    'personal-hygiene-auchan': 'Гігієна',
+    'personal-hygiene-megamarket': 'Гігієна',
+
+    'chemicals-varus': 'Інше',
+    'cosmetics-and-care-varus': 'Інше',
+    'babies-varus': 'Інше',
+    'all-stationery-varus': 'Інше',
+    'clothes-and-shoes-varus': 'Інше',
+    'hobby-and-rest-varus': 'Інше',
+    'tins-jars-cooking': 'Інше',
+    'babies': 'Інше',
+    'stationery': 'Інше',
+    'hobby': 'Інше',
+    'clothes-and-shoes-novus': 'Інше',
+    'tobacco-goods': 'Інше',
+    'chemicals-metro': 'Інше',
+    'babies-metro': 'Інше',
+    'stationery-metro': 'Інше',
+    'hobby-and-rest-metro': 'Інше',
+    'chemicals-ekomarket': 'Інше',
+    'hobby-and-rest-ekomarket': 'Інше',
+    'all-stationery-ekomarket': 'Інше',
+    'clothes-and-shoes-ekomarket': 'Інше',
+    'babies-ekomarket': 'Інше',
+    'interior-and-textiles-ekomarket': 'Інше',
+    'cosmetics-and-care-ekomarket': 'Інше',
+    'bioproducts-and-diabetic-goods-auchan': 'Інше',
+    'stationery-auchan': 'Інше',
+    'babies-auchan': 'Інше',
+    'gourmet-auchan': 'Інше',
+    'hobby-auchan': 'Інше',
+    'clothes-auchan': 'Інше',
+    'chemicals-megamarket': 'Інше',
+    'babies-megamarket': 'Інше',
+    'cosmetics-and-care-megamarket': 'Інше',
+
+    None: 'Інше'
+}
+
+# Configurations for Silpo
+headers_silpo = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json'
+}
+
+def get_data_for_silpo_request(product_amount):
+    data = f"""
+    {{
+        "method": "GetSimpleCatalogItems",
+        "data":
+        {{
+            "CategoryFilter": [],
+            "From": 1,
+            "MultiFilters": "",
+            "Promos": [],
+            "RangeFilters": "",
+            "To": {product_amount},
+            "UniversalFilters": [],
+            "basketGuid": "",
+            "businessId": 1,
+            "deliveryType": 2,
+            "filialId": 3288,
+            "ingredients": "false",
+            "merchantId": 1,
+            "onlyPromo": "true",
+        }}
+    }}
+    """
+
+    return data
 
 
-def send_report(time_of_work):
-    global errors
-    if len(errors) == 0:
-        print(time_of_work)
-    else:
-        pass
+data_count = """
+{
+    method: "GetPromoFilters",
+    "data":
+    {
+        merchantId: 1, 
+        basketGuid: "", 
+        deliveryType: 2, 
+        promoId: null, 
+        filialId: 3288, 
+        setId: null
+    }
+}
+"""
