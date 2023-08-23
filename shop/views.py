@@ -73,12 +73,13 @@ def main_page(request):
     return redirect('products')
 
 
+# Returns first 30 products sorted by persent of sale
 def products(request):
     filtered_products = Product.objects.all().order_by('-percent_of_sale')[:30]
     ids = SelectedProductsAnonymous.objects.values_list('product_id', flat=True).filter(user_ip=get_client_ip(request))
     selected_products = Product.objects.filter(id__in=ids)
 
-    filtered_countries = [translate_countries[i] for i in get_countries_from_model()]
+    filtered_countries = [i for i in get_countries_from_model()] # [translate_countries[i] for i in get_countries_from_model()]
 
     context = {
         'data': filtered_products,
@@ -118,9 +119,15 @@ def load_more_data(request):
     filtered_categories = request.GET.getlist('cats[]')
     filtered_countries = request.GET.getlist('country[]')
 
-    filtered_shops = [shops[shop] for shop in filtered_shops]
-    filtered_categories = [categories[category] for category in filtered_categories]
-    filtered_countries = [translate_countries_reversed[country] for country in filtered_countries]
+    filtered_shops = [
+        shops[shop] for shop in filtered_shops
+    ]
+    filtered_categories = [
+        categories[category] for category in filtered_categories
+    ]
+    filtered_countries = [
+        translate_countries_reversed[country] for country in filtered_countries
+    ]
 
     data = Product.objects.all()
     if len(filtered_categories) > 0:
@@ -132,13 +139,17 @@ def load_more_data(request):
 
     limiter = True if len(data.order_by('-id')[offset:offset+limit]) == 30 else False
 
+    selected_products_list = SelectedProductsAnonymous.objects.values_list(
+        'product_id', flat=True
+    ).filter(
+        user_ip=get_client_ip(request)
+    )
+
     t = render_to_string(
         'shop/ajax_templates/shop_print_with_slugs.html',
         {
             'data': data.order_by('-id')[offset:offset+limit],
-            'selected_products': SelectedProductsAnonymous.objects.values_list('product_id', flat=True).filter(
-                user_ip=get_client_ip(request)
-            )
+            'selected_products': selected_products_list
         }
     )
     return JsonResponse({'data': t, 'limiter': limiter})
@@ -150,9 +161,15 @@ def filter_data(request):
     filtered_categories = request.GET.getlist('categories[]')
     filtered_countries = request.GET.getlist('country[]')
 
-    filtered_shops = [shops[shop] for shop in filtered_shops]
-    filtered_categories = [categories[category] for category in filtered_categories]
-    filtered_countries = [translate_countries_reversed[country] for country in filtered_countries]
+    filtered_shops = [
+        shops[shop] for shop in filtered_shops
+    ]
+    filtered_categories = [
+        categories[category] for category in filtered_categories
+    ]
+    filtered_countries = [
+        translate_countries_reversed[country] for country in filtered_countries
+    ]
 
     filtered_products = Product.objects.all()
     if len(filtered_shops) > 0:
@@ -184,6 +201,7 @@ def filter_data(request):
     })
 
 
+# User's profile
 @login_required
 def profile(request):
     return render(request, 'shop/mailing.html')
@@ -191,16 +209,28 @@ def profile(request):
 
 def delete_selected_from_model(request):
     ids = request.POST.get('post_id')
-    SelectedProductsAnonymous.objects.filter(user_ip=get_client_ip(request), product_id=ids).delete()
+    SelectedProductsAnonymous.objects.filter(
+        user_ip=get_client_ip(request), 
+        product_id=ids
+    ).delete()
     # -1
-    return JsonResponse({'data': '', 'csrfmiddlewaretoken': request.POST.get('csrfmiddlewaretoken')})
+    return JsonResponse({
+        'data': '', 
+        'csrfmiddlewaretoken': request.POST.get('csrfmiddlewaretoken')
+    })
 
 
 def add_selected_to_model(request):
     ids = request.POST.get('post_id')
-    SelectedProductsAnonymous.objects.create(user_ip=get_client_ip(request), product_id=ids[ids.find('_')+1:])
+    SelectedProductsAnonymous.objects.create(
+        user_ip=get_client_ip(request), 
+        product_id=ids[ids.find('_')+1:]
+    )
 
-    return JsonResponse({'data': '', 'csrfmiddlewaretoken': request.POST.get('csrfmiddlewaretoken')})
+    return JsonResponse({
+        'data': '', 
+        'csrfmiddlewaretoken': request.POST.get('csrfmiddlewaretoken')
+    })
 
 
 class ShowProduct(DetailView):
@@ -229,12 +259,14 @@ def sort_other(category, post_category):
 
 
 #   ADDITIONAL FUNCTIONS
+
 def find_url(name):
     for i in range(len(upper_menu_shops)):
         if name in upper_menu_shops[i][0]:
             return upper_menu_shops[i][1]
 
 
+# returns 6 most popular countries where products are produced
 def get_countries_from_model():
     countries = Product.objects.values_list('country', flat=True)
     counter = Counter(countries)
@@ -242,7 +274,7 @@ def get_countries_from_model():
     return list(countries.keys())[:6]
 
 
-#   returns ip of a user
+#   returns ip address of a user
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
