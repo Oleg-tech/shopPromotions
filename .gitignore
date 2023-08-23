@@ -7,6 +7,7 @@ migrations/
 venv/
 
 .idea/
+*.env
 
 # C extensions
 *.so
