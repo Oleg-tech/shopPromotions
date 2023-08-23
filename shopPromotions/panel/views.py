@@ -5,9 +5,8 @@ from django.views.generic import ListView, FormView
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from .forms import EditUserForm
-
 from shop.models import Mailing, Product
+from panel.forms import EditUserForm
 
 
 def main_page_admin(request):
