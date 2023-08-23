@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from .models import *
+from .models import Mailing
 
 
 class CreateUserForm(UserCreationForm):
@@ -50,38 +50,3 @@ class UserMailingForm(forms.ModelForm):
     class Meta:
         model = Mailing
         fields = ['user_id']
-
-
-# class RegisterUser(forms.ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ['username', 'password', 'email']
-#         widgets = {
-#                     'username': forms.TextInput(attrs={
-#                         'class': 'form-input',
-#                         'placeholder': 'Ім\'я користувача'
-#                     }),
-#                     'password': forms.PasswordInput(attrs={
-#                         'class': 'form-input',
-#                         'placeholder': 'Пароль'
-#                     }),
-#                     'email': forms.EmailInput(attrs={
-#                         'class': 'form-input',
-#                         'placeholder': 'Пошта'
-#                     })
-#                 }
-    # email = forms.EmailField(max_length=100)
-    # nickname = forms.CharField(max_length=20)
-    # password = forms.PasswordInput(render_value=True)
-    # widget = forms.Select(attrs={'onchange': 'submit()'})
-
-
-# class RegisterUserForm(RegisterUser):
-#     class Meta:
-#         model = User
-#         fields = ('username', 'password', 'mail')
-#         widgets = {
-#             'username': forms.CharField(attrs={'class': 'form-input'}),
-#             'password': forms.PasswordInput(attrs={'class': 'form-input'}),
-#             'mail': forms.EmailField(attrs={'class': 'form-input'})
-#         }
