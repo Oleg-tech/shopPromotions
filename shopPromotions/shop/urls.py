@@ -2,7 +2,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 
-from .views import *
+from shop.views import (
+    create_user, AdminLoginView, user_exit, main_page,
+    products, selected, ShowProduct, filter_data, load_more_data, 
+    delete_selected_from_model, add_selected_to_model
+)
 
 
 urlpatterns = [

@@ -32,23 +32,3 @@ upper_menu_shops = [
 ]
 title_name = 'shop'
 present_shop = None
-
-translate_countries = {
-    'ukraine': 'Україна',
-    'poland': 'Польща',
-    'china': 'Китай',
-    'germany': 'Німеччина',
-    'italy': 'Італія',
-    'france': 'Франція',
-    '-': '-'
-}
-
-translate_countries_reversed = {
-    'Україна': 'ukraine',
-    'Польща': 'poland',
-    'Китай': 'china',
-    'Німеччина': 'germany',
-    'Італія': 'italy',
-    'Франція': 'france',
-    '-': '-'
-}

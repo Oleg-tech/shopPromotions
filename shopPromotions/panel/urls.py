@@ -1,15 +1,14 @@
-from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
-from django.urls import path, re_path
-from django.contrib.auth import views as auth_views
+from django.urls import path
 
-# from .views import *
 from django import forms
 
-from panel.views import *
+from panel.views import (
+    main_page_admin, mailing_table_admin, EditFormUserView, 
+    UsersModeratorView, ShowProducts
+)
 
 
 class IndexLoginForm(AuthenticationForm):
