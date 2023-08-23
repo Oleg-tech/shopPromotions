@@ -37,7 +37,7 @@
         {% if country != "-" %}
             <div>
                 <input class="filter-checkbox" data-filter="country" id="{{country}}" value="{{country}}" type="checkbox">
-                <label class="change_letter" for="{{country}}"><b>{{country}}</b></label>
+                <label class="change_letter" for="{{country}}"><b>{{ country | title }}</b></label>
             </div>
         {% endif %}
     {% endfor %}
